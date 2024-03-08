@@ -3,7 +3,7 @@ from typing import Dict
 import json
 
 
-class OpenAIRepository:
+class LangChainRepository:
     def __init__(self, client: OpenAI):
         self.client = client
 
