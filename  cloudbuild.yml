@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}']
+
+images:
+  - 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}'
+substitutions:
+  _SHORT_SHA: 'v1'
