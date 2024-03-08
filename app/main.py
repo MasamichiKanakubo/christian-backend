@@ -7,6 +7,7 @@ from openai import OpenAI
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from app.repositories.langchain_repository import OpenAIRepository
 
 load_dotenv()
 
