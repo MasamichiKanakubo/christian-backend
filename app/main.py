@@ -20,6 +20,8 @@ langchain_repository = LangChainRepository(client=OpenAI(api_key=os.getenv("OPEN
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
+print(LINE_CHANNEL_ACCESS_TOKEN)
+print(LINE_CHANNEL_SECRET)
 
 question_pattarn = re.compile(r"\?")
 
