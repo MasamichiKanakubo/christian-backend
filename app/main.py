@@ -1,6 +1,7 @@
 import os
 import re
 import requests
+import logging
 import asyncio
 import aiohttp
 from openai import OpenAI
@@ -11,11 +12,14 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from app.repositories.langchain_repository import LangChainRepository
+
 # from app.repositories.scrapbox_repository import ScrapboxRepository
 
 load_dotenv()
 
-langchain_repository = LangChainRepository(client=OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
+langchain_repository = LangChainRepository(
+    client=OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+)
 # scrapbox_repository = ScrapboxRepository(os.getenv("SCRAPBOX_PROJECT_NAME"))
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
@@ -36,32 +40,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
+
 @app.post("/webhook")
 async def line_webhook(request: Request):
-    body = await request.json()
-    signature = request.headers["X-Line-Signature"]
-    try:
-        handler.handle(body.decode(), signature)
-    except InvalidSignatureError:
-        print("Invalid signature. Please check your channel access token/channel secret.")
-        return "NG", 400
+    data = await request.json()
+    logging.info("LINE WebHook Data: ", data)
+    return {"success": True}
 
-    return "OK"
-
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    question = event.message.text
-    answer = langchain_repository.generate_gpt_answer(question)
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text=answer["content"])
-    )
 
 connector = aiohttp.TCPConnector(ssl=False)
 deploy_url = "https://christian-6ibjha4nnq-an.a.run.app"
+
+
 async def send_request():
     while True:
         async with aiohttp.ClientSession(connector=connector) as session:
