@@ -6,7 +6,7 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}']
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'your-service-name', '--image', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}', '--region', 'asia-northeast1', '--platform', 'managed']
+    args: ['run', 'deploy', 'beginners-hackathon', '--image', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}', '--region', 'asia-northeast1', '--platform', 'managed']
 
 
 images:
