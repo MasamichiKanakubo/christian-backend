@@ -1,11 +1,26 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/christian:${COMMIT_SHA}', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}']
+    args: ['push', 'gcr.io/$PROJECT_ID/christian:${COMMIT_SHA}']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'christian'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/christian:${COMMIT_SHA}'
+    - '--region'
+    - 'asia-northeast1' 
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
 
 images:
-  - 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}'
+  - 'gcr.io/$PROJECT_ID/christian:${COMMIT_SHA}'
 substitutions:
-  _SHORT_SHA: 'latest'
+  COMMIT_SHA: 'latest'
