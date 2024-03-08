@@ -15,7 +15,7 @@ from app.repositories.langchain_repository import LangChainRepository
 
 load_dotenv()
 
-langchain_repository = LangChainRepository(OpenAI(os.getenv("OPENAI_API_KEY")))
+langchain_repository = LangChainRepository(client=OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
 # scrapbox_repository = ScrapboxRepository(os.getenv("SCRAPBOX_PROJECT_NAME"))
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
