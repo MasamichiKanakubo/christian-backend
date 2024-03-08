@@ -8,4 +8,4 @@ steps:
 images:
   - 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}'
 substitutions:
-  _SHORT_SHA: 'v1'
+  _SHORT_SHA: 'v2'
