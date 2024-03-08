@@ -11,12 +11,12 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from app.repositories.langchain_repository import LangChainRepository
-from app.repositories.scrapbox_repository import ScrapboxRepository
+# from app.repositories.scrapbox_repository import ScrapboxRepository
 
 load_dotenv()
 
 langchain_repository = LangChainRepository(OpenAI(os.getenv("OPENAI_API_KEY")))
-scrapbox_repository = ScrapboxRepository(os.getenv("SCRAPBOX_PROJECT_NAME"))
+# scrapbox_repository = ScrapboxRepository(os.getenv("SCRAPBOX_PROJECT_NAME"))
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
@@ -62,13 +62,13 @@ def handle_message(event):
     )
 
 connector = aiohttp.TCPConnector(ssl=False)
-deploy_url = "http://localhost:8080"
+deploy_url = "https://christian-6ibjha4nnq-an.a.run.app"
 async def send_request():
     while True:
         async with aiohttp.ClientSession(connector=connector) as session:
             async with session.get(deploy_url) as response:
                 print(await response.text())
-        await asyncio.sleep(50)  # 50秒ごとにリクエストを送信
+        await asyncio.sleep(30)  # 50秒ごとにリクエストを送信
 
 
 @app.on_event("startup")
