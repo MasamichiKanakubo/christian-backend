@@ -1,11 +1,11 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/pragmatic-lead-410614/christian:${_SHORT_SHA}', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/pragmatic-lead-410614/christian:${_SHORT_SHA}']
+    args: ['push', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}']
 
 images:
-  - 'gcr.io/pragmatic-lead-410614/christian:${_SHORT_SHA}'
+  - 'gcr.io/$PROJECT_ID:${_SHORT_SHA}'
 substitutions:
   _SHORT_SHA: 'v1'
