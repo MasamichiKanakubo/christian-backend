@@ -4,6 +4,8 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'beginners-hackthon', '--image', 'gcr.io/$PROJECT_ID/christian:$COMMIT_SHA', '--platform', 'managed', '--region', 'asia-northeast1']
 
 images:
   - 'gcr.io/$PROJECT_ID/christian:${_SHORT_SHA}'
