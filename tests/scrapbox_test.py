@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = 'https://scrapbox.io/api/pages/christian-beginners/a/'
+url = 'https://scrapbox.io/api/pages/christian-beginners//'
 
 response = requests.get(url)
 

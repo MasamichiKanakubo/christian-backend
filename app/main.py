@@ -1,15 +1,15 @@
 import os
+import json
 import re
 import requests
 import logging
 import asyncio
 import aiohttp
 from openai import OpenAI
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from app.repositories.langchain_repository import LangChainRepository
 
@@ -25,7 +25,9 @@ langchain_repository = LangChainRepository(
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 
-question_pattarn = re.compile(r"\?")
+url = 'https://scrapbox.io/api/pages/christian-beginners/'
+
+question_re_pattern = re.compile(r"\?")
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
@@ -46,12 +48,45 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.post("/webhook")
-async def line_webhook(request: Request):
-    data = await request.json()
-    logging.info("LINE WebHook Data: ", data)
-    return {"success": True}
+@app.post("/")
+async def callback(request: Request, background_tasks: BackgroundTasks):
+    body = await request.body()
+    data_json = json.loads(body)
+    
+    if data_json["events"]:
+        try:
+            background_tasks.add_task(handle_message, data_json)
+        except IndexError:
+            return {"error": "Invalid event data"}
+    else:
+        return {"error": "Events not found"}
+    return {"message": "OK"}
 
+@handler.add(MessageEvent)
+def handle_message(data_json):
+    incoming_text = data_json["events"][0]["message"]["text"]
+    reply_token = data_json["events"][0]["replyToken"]
+    
+    with open("app/use_cases/scrapbox/faqs.json", "r", encoding="utf-8") as file:
+        faqs = json.load(file)
+        
+    for item in faqs:
+        if incoming_text in item:
+            response = requests.get(url + item[incoming_text]).json()
+            descriptions = response.get("descriptions", [])
+            
+            descriptions_list: list = [
+                description for description in descriptions
+                if not question_re_pattern.search(description)
+            ]
+            description_text = "".join(descriptions_list)
+            reply_message = TextSendMessage(text=description_text)
+            line_bot_api.reply_message(reply_token, reply_message)
+            return
+    
+    default_text = TextSendMessage(text="質問に対する回答は見つかりませんでした。")
+    line_bot_api.reply_message(reply_token, default_text)
+            
 
 connector = aiohttp.TCPConnector(ssl=False)
 deploy_url = "https://christian-6ibjha4nnq-an.a.run.app"
