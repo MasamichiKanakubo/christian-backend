@@ -22,5 +22,7 @@ steps:
 
 images:
   - 'gcr.io/$PROJECT_ID/christian:${COMMIT_SHA}'
+
 substitutions:
   COMMIT_SHA: 'latest'
+
