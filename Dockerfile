@@ -7,6 +7,8 @@ WORKDIR /app
 # 依存関係ファイルをコピー
 COPY requirements.txt .
 
+RUN pip install --no-cache-dir --upgrade pip
+
 # 依存関係をインストール
 RUN pip install --no-cache-dir -r requirements.txt
 
