@@ -10,11 +10,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip
 
 # 依存関係をインストール
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --user --no-cache-dir -r requirements.txt --verbose
 
 # アプリケーションファイルのコピー
 COPY . .
 
 # Uvicornを使用してアプリケーションを実行
-CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"
-
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
