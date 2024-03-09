@@ -11,15 +11,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from app.repositories.langchain_repository import LangChainRepository
 
 # from app.repositories.scrapbox_repository import ScrapboxRepository
 
 load_dotenv()
 
-langchain_repository = LangChainRepository(
-    client=OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-)
 # scrapbox_repository = ScrapboxRepository(os.getenv("SCRAPBOX_PROJECT_NAME"))
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")

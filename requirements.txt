@@ -83,8 +83,8 @@ pyasn1-modules==0.3.0
 pydantic==2.6.3
 pydantic_core==2.16.3
 pygpt4all==1.1.0
-pygptj==2.0.3
-pyllamacpp==2.4.3
+# pygptj==2.0.3
+# pyllamacpp==2.4.3
 PyPika==0.48.9
 pyproject_hooks==1.0.0
 python-dateutil==2.9.0.post0
