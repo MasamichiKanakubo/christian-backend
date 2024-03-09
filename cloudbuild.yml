@@ -26,3 +26,6 @@ images:
 substitutions:
   COMMIT_SHA: 'latest'
 
+
+options:
+  logging: CLOUD_LOGGING_ONLY
